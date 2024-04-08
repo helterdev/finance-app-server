@@ -87,4 +87,27 @@ export const signin = async (req: Request, res: Response) => {
   }
 };
 
-export const profile = async (req: Request, res: Response) => {};
+export const profile = async (req: Request, res: Response) => {
+  const { id } = req.user;
+
+  const profileFound = await UserModel.findById(id);
+
+  if (!profileFound) {
+    return res.status(404).json({
+      message: 'Profile not found',
+    });
+  }
+
+  res.status(200).json({
+    id: profileFound._id,
+    email: profileFound.email,
+    username: profileFound.username,
+  });
+};
+
+export const logout = async (req: Request, res: Response) => {
+  res.cookie('token', null, { expires: new Date(0) });
+  res.status(200).json({
+    message: 'Logout success',
+  });
+};
