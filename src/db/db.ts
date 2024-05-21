@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config();
+import accessenv from '../config';
 
-const DATABASE = process.env.DATABASE!;
+const DATABASE = accessenv.DATABASE!;
 
 export const connectDB = async () => {
   try {

@@ -8,13 +8,13 @@ interface User {
   exp: number;
 }
 
-declare global {
-  namespace Express {
-    interface Request {
-      user: User;
-    }
-  }
-}
+// declare global {
+//   namespace Express {
+//     interface Request {
+//       user: User;
+//     }
+//   }
+// }
 
 const secretKey = 'accesstoken';
 

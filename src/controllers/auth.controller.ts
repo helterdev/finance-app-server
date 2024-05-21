@@ -9,7 +9,7 @@ export const signup = async (req: Request, res: Response) => {
   try {
     const userFind = await UserModel.findOne({ email });
     if (userFind) {
-      return res.status(200).json({
+      return res.status(409).json({
         message: 'User already exists',
       });
     }
@@ -54,7 +54,7 @@ export const signin = async (req: Request, res: Response) => {
 
     if (!userFind) {
       return res.status(404).json({
-        messsage: 'User not found',
+        message: 'User not found',
       });
     }
 
@@ -70,7 +70,9 @@ export const signin = async (req: Request, res: Response) => {
       id: userFind._id,
       email: userFind.email,
     });
-    res.cookie('token', token);
+    res.cookie('token', token, {
+      httpOnly: true,
+    });
 
     return res.status(200).json({
       message: 'Login Success',
@@ -88,6 +90,7 @@ export const signin = async (req: Request, res: Response) => {
 };
 
 export const profile = async (req: Request, res: Response) => {
+  //@ts-ignore
   const { id } = req.user;
 
   const profileFound = await UserModel.findById(id);
@@ -110,4 +113,8 @@ export const logout = async (req: Request, res: Response) => {
   res.status(200).json({
     message: 'Logout success',
   });
+};
+
+export const hello = async (req: Request, res: Response) => {
+  res.send('Hello World');
 };

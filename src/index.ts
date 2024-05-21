@@ -1,7 +1,8 @@
 import { connectDB } from './db/db';
 import app from './app';
+import accessenv from './config';
 
-const port = process.env.PORT!;
+const port = accessenv.PORT;
 
 connectDB();
 
