@@ -1,14 +1,14 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import accessenv from '../config';
-import { IUserGoogle, UserGoogleModel } from '../db/models/user.google.model';
+import { UserGoogleModel } from '../db/models/user.google.model';
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: accessenv.GOOGLE_CLIENT_ID,
       clientSecret: accessenv.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:8080/api/auth/google/callback',
+      callbackURL: accessenv.URL,
       scope: ['email', 'profile'],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -49,7 +49,6 @@ passport.deserializeUser(async (id, done) => {
     }
     return done(null, false);
   } catch (error) {
-    console.log(error);
     return done(error, undefined);
   }
 });

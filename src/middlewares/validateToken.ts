@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 
-interface User {
+interface UserJWT {
   id: string;
   email: string;
   iat: number;
@@ -34,7 +34,7 @@ export const authRequired = (
   jwt.verify(
     token,
     secretKey,
-    (err: JsonWebTokenError | null, user: User | any) => {
+    (err: JsonWebTokenError | null, user: UserJWT | any) => {
       if (err) {
         return res.status(401).json({
           message: 'Invalid token',

@@ -7,6 +7,7 @@ import google from './routes/auth.google.routes';
 import accessenv from './config';
 import session from 'express-session';
 import passport from './strategies/google';
+import { isAuthenticated, logout } from './middlewares/validateUser';
 
 const app: express.Application = express();
 
@@ -37,15 +38,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 //routes//
-app.get('/home', (req, res) => {
-  res.send('Hello World!');
-});
-app.get('/message', (req, res) => {
-  res.send('Error');
-});
+
 //route auth whith username and password
 app.use('/api/v1/auth', auth);
 // route auth with google
-app.use('/api/auth', google);
+app.use('/api/v1/auth', google);
 
 export default app;
