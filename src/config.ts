@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -9,6 +9,8 @@ const accessenv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET!,
   URL: process.env.DEV_CALLBACK_URL!,
   SECRET_KEY: process.env.SECRET_KEY!,
+  FAILED_URL: process.env.FAILED_URL!,
+  SUCCESS_URL: process.env.SUCCESS_URL!,
 };
 
 export default accessenv;

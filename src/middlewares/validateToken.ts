@@ -1,22 +1,9 @@
-import express from 'express';
-import jwt, { JsonWebTokenError } from 'jsonwebtoken';
+import express from "express";
+import passport from "passport";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
+import { UserJWT } from "../types/express";
 
-interface UserJWT {
-  id: string;
-  email: string;
-  iat: number;
-  exp: number;
-}
-
-// declare global {
-//   namespace Express {
-//     interface Request {
-//       user: User;
-//     }
-//   }
-// }
-
-const secretKey = 'accesstoken';
+const secretKey = "accesstoken";
 
 export const authRequired = (
   req: express.Request,
@@ -27,7 +14,7 @@ export const authRequired = (
 
   if (!token) {
     return res.status(401).json({
-      message: 'Not token, Access denied',
+      message: "Not token, Access denied",
     });
   }
 
@@ -37,11 +24,11 @@ export const authRequired = (
     (err: JsonWebTokenError | null, user: UserJWT | any) => {
       if (err) {
         return res.status(401).json({
-          message: 'Invalid token',
+          message: "Invalid token",
         });
       }
 
-      req.user = user;
+      req.userJWT = user;
 
       next();
     }
