@@ -1,5 +1,6 @@
 import { IUser, UserModel } from "../db/models/user.model";
-import { Request, Response } from "express";
+import { UserGoogleModel } from "../db/models/user.google.model";
+import { NextFunction, Request, Response } from "express";
 import { compareHashed, hashed } from "../libs/hash";
 import { createToken } from "../libs/jwt";
 
@@ -90,31 +91,63 @@ export const signin = async (req: Request, res: Response) => {
 };
 
 export const profile = async (req: Request, res: Response) => {
-  //@ts-ignore
-  const { id } = req.userJWT;
+  console.log({ "JWT:": req.userJWT, "Google:": req.user });
 
-  const profileFound = await UserModel.findById(id);
+  if (req.isAuthenticated()) {
+    //@ts-ignore
+    const { _id } = req.user;
+    const profileGoogle = await UserGoogleModel.findById(_id);
 
-  if (!profileFound) {
-    return res.status(404).json({
-      message: "Profile not found",
+    if (!profileGoogle) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    return res.status(200).json({
+      _id: profileGoogle._id,
+      id: profileGoogle.id,
+      email: profileGoogle.email,
+      username: profileGoogle.displayName,
+    });
+  } else {
+    //@ts-ignore
+    const { id } = req.userJWT;
+    const profileFound = await UserModel.findById(id);
+
+    if (!profileFound) {
+      return res.status(404).json({
+        message: "Profile not found",
+      });
+    }
+
+    res.status(200).json({
+      id: profileFound._id,
+      email: profileFound.email,
+      username: profileFound.username,
     });
   }
-
-  res.status(200).json({
-    id: profileFound._id,
-    email: profileFound.email,
-    username: profileFound.username,
-  });
 };
 
-export const logout = async (req: Request, res: Response) => {
-  res.cookie("token", null, { expires: new Date(0) });
-  res.status(200).json({
-    message: "Logout success",
-  });
-};
-
-export const hello = async (req: Request, res: Response) => {
-  res.send("Hello World");
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.userJWT) {
+    res.cookie("token", null, { expires: new Date(0) });
+    return res.status(200).json({
+      message: "Logout success",
+    });
+  } else {
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+      req.session.destroy((err) => {
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).json({ message: "Logout success" });
+      });
+    });
+  }
 };

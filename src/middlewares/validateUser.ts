@@ -9,7 +9,6 @@ export const isAuthenticated = (
   next: NextFunction
 ) => {
   const { token } = req.cookies;
-
   if (token) {
     jwt.verify(
       token,
@@ -30,10 +29,8 @@ export const isAuthenticated = (
     if (req.isAuthenticated()) {
       return next();
     }
-    return res.json({ message: "Access Denied" });
+    return res.status(401).json({ message: "Access Denied" });
   }
-
-  return res.json({ message: "Access Denied" });
 };
 
 export const isNotAuthenticated = (
@@ -51,21 +48,4 @@ export const isNotAuthenticated = (
   }
 
   return res.redirect(accessenv.SUCCESS_URL);
-};
-
-export const logout = (req: Request, res: Response, next: NextFunction) => {
-  if (req.isAuthenticated()) {
-    req.logout((err) => {
-      if (err) {
-        return next(err);
-      }
-      req.session.destroy((err) => {
-        if (err) {
-          return next(err);
-        }
-        return res.redirect("/login");
-      });
-    });
-  }
-  return res.redirect("/login");
 };

@@ -4,11 +4,11 @@ import cors from "cors";
 import morgan from "morgan";
 import auth from "./routes/auth.routes";
 import google from "./routes/auth.google.routes";
-import user from "./routes/auth.users.routes";
+import profile from "./routes/profile.routes";
+import data from "./routes/auth.data.routes";
 import accessenv from "./config";
 import session from "express-session";
 import passport from "./strategies/google";
-import { isAuthenticated, logout } from "./middlewares/validateUser";
 
 const app: express.Application = express();
 
@@ -37,14 +37,14 @@ app.use(passport.session());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
-
 //routes//
 
 //route auth whith username and password
 app.use("/api/v1/auth", auth);
 // route auth with google
 app.use("/api/v1/auth", google);
-//homecash router
-app.use("/api/v1/auth", user);
-
+//profile router
+app.use("/api/v1/auth", profile);
+// data router
+app.use("/api/v1/auth", data);
 export default app;

@@ -1,6 +1,6 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import passport from "passport";
-import { isNotAuthenticated, logout } from "../middlewares/validateUser";
+import { isNotAuthenticated } from "../middlewares/validateUser";
 import accessenv from "../config";
 
 const router = Router();
@@ -13,7 +13,5 @@ router.get(
     successRedirect: accessenv.SUCCESS_URL,
   })
 );
-
-router.get("/logout", logout);
 
 export default router;

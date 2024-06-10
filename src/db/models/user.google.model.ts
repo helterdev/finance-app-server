@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document } from "mongoose";
 
 export interface IUserGoogle extends Document {
   id: string;
@@ -18,6 +18,6 @@ const UserGoogleSchema = new Schema(
 );
 
 export const UserGoogleModel = model<IUserGoogle>(
-  'UserGoogle',
+  "UserGoogle",
   UserGoogleSchema
 );
